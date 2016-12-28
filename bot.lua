@@ -2,12 +2,12 @@
   .. ';.luarocks/share/lua/5.2/?/init.lua'
 package.cpath = package.cpath .. ';.luarocks/lib/lua/5.2/?.so'
 
--- @MuteTeam
+
 tdcli = dofile('tdcli.lua')
 redis = (loadfile "./libs/redis.lua")()
 
 sudo_users = {
-  105616381,
+  90285047,
   0
 }
 
@@ -43,7 +43,7 @@ function vardump(value, depth, key)
   elseif type(value)  == 'function' or 
     type(value) == 'thread' or 
     type(value) == 'userdata' or 
-    value == nil then --@MuteTeam
+    value == nil then 
       print(spaces .. tostring(value))
   elseif type(value)  == 'string' then
     print(spaces .. linePrefix .. '"' .. tostring(value) .. '",')
@@ -88,7 +88,7 @@ function tdcli_update_callback(data)
         tdcli.sendMessage(chat_id, msg.id_, 1, '<b>PONG</b>', 1, 'html')
       end
       if input:match("^[#!/][Ii][Dd]$") then
-        tdcli.sendMessage(chat_id, msg.id_, 1, '<b>SuperGroup ID : </b><code>'..string.sub(chat_id, 5,14)..'</code>\n<b>User ID : </b><code>'..user_id..'</code>\n<b>Channel : </b>@MuteTeam', 1, 'html')
+        tdcli.sendMessage(chat_id, msg.id_, 1, '<b>SuperGroup ID : </b><code>'..string.sub(chat_id, 5,14)..'</code>\n<b>User ID : </b><code>'..user_id..'</code>', 1, 'html')
       end
 
       if input:match("^[#!/][Pp][Ii][Nn]") and reply_id then
@@ -104,7 +104,7 @@ function tdcli_update_callback(data)
       if input:match("^[#!/][Ll]ock links$") and is_sudo(msg) then
        if redis:get('lock_linkstg:'..chat_id) then
         tdcli.sendMessage(chat_id, msg.id_, 1, '<b>Link posting is already locked</b>', 1, 'html')
-       else -- @MuteTeam
+       else 
         redis:set('lock_linkstg:'..chat_id, true)
         tdcli.sendMessage(chat_id, msg.id_, 1, '<b>Link posting has been locked</b>', 1, 'html')
       end
@@ -123,7 +123,7 @@ function tdcli_update_callback(data)
       if input:match("^[#!/][Mm]ute all$") and is_sudo(msg) then
        if redis:get('mute_alltg:'..chat_id) then
         tdcli.sendMessage(chat_id, msg.id_, 1, '<b>Mute All is already on</b>', 1, 'html')
-       else -- @MuteTeam
+       else 
         redis:set('mute_alltg:'..chat_id, true)
         tdcli.sendMessage(chat_id, msg.id_, 1, '<b>Mute All has been enabled</b>', 1, 'html')
       end
@@ -142,7 +142,7 @@ function tdcli_update_callback(data)
 	  else 
 	  Links = "no"
 	 end
-         -- @MuteTeam
+         
          local all = 'mute_alltg:'..chat_id
 	 if redis:get(all) then
 	  All = "yes"

@@ -91,11 +91,11 @@ function tdcli_update_callback(data)
         tdcli.sendMessage(chat_id, msg.id_, 1, '<b>SuperGroup ID : </b><code>'..string.sub(chat_id, 5,14)..'</code>\n<b>User ID : </b><code>'..user_id..'</code>', 1, 'html')
       end
 
-	if chat_id == redis:get('groups',chat_id) then
+	if chat_id == redis:set('groups',chat_id) then
 return true			
 end
 
-if not chat_id == redis:get('groups',chat_id) and not input:match('^[#!/][Aa]dd$') and not input:match('^[#!/][Rr]em$') then
+if chat_id == redis:del('groups',chat_id) then
 return false			
 end			
 

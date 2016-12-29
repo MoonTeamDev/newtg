@@ -96,9 +96,9 @@ redis:set('add_rem'..msg.chat_id_,true)
 elseif input:match('^/rem$') and is_sudo(msg) then
 redis:del('add_rem'..msg.chat_id_)
 end
-if redis:get('add_rem'..msg.chat_id_) and msg then
+if redis:get('add_rem'..msg.chat_id_) then
 return true
-elseif not redis:get('add_rem'..msg.chat_id_) and msg then
+elseif not redis:get('add_rem'..msg.chat_id_) then
 return false
 end		
 			

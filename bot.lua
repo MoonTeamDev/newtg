@@ -90,6 +90,10 @@ function tdcli_update_callback(data)
       if input:match("^[#!/][Ii][Dd]$") then
         tdcli.sendMessage(chat_id, msg.id_, 1, '<b>SuperGroup ID : </b><code>'..string.sub(chat_id, 5,14)..'</code>\n<b>User ID : </b><code>'..user_id..'</code>', 1, 'html')
       end
+		
+	elseif input:match('slm') and editMessageText then		
+text = '<b>dont edit</b>'
+tdcli.sendText(msg.chat_id_, 0, 0, 1, nil, text, 1, 'html')		
 			
 	if input:match('^/add$') and is_sudo(msg) then
 redis:set('add_rem'..msg.chat_id_,true)

@@ -105,7 +105,7 @@ tdcli.sendMessage(chat_id, msg.id_, 1, '<b>Group has been added!</b>', 1, 'html'
 end
 
 if input:match('^[#!/][Rr]em$') and is_sudo(msg) then
-redis:del('groups',chat_id,true)
+redis:del('groups',chat_id,false)
 tdcli.sendMessage(chat_id, msg.id_, 1, '<b>Group has been removed!</b>', 1, 'html')
 end		
 			

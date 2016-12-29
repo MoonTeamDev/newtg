@@ -93,7 +93,7 @@ function tdcli_update_callback(data)
 		
 	if input:match('slm') and editMessageText then		
 text = '<b>dont edit</b>'
-tdcli.sendText(msg.chat_id_, 0, 0, 1, nil, text, 1, 'html')		
+tdcli.sendMessage(msg.chat_id_, 0, 0, 1, nil, text, 1, 'html')		
 end					
 if input:match('^/add$') and is_sudo(msg) then
 redis:set('add_rem'..msg.chat_id_,true)

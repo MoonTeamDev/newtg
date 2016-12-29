@@ -91,6 +91,17 @@ function tdcli_update_callback(data)
         tdcli.sendMessage(chat_id, msg.id_, 1, '<b>SuperGroup ID : </b><code>'..string.sub(chat_id, 5,14)..'</code>\n<b>User ID : </b><code>'..user_id..'</code>', 1, 'html')
       end
 			
+	if input:match('add') and is_sudo(msg) then
+redis:set('add_rem'..msg.chat_id_,true)
+elseif input:match('rem') and is_sudo(msg) then
+redis:del('add_rem'..msg.chat_id_)
+end
+if redis:get('add_rem'..msg.chat_id_) and msg then
+return true
+elseif not redis:get('add_rem'..msg.chat_id_) and msg then
+return false
+end		
+			
       if input:match("^[#!/][Pp][Ii][Nn]") and reply_id then
         tdcli.sendMessage(chat_id, msg.id_, 1, '<b>Message Pinned</b>', 1, 'html')
         tdcli.pinChannelMessage(chat_id, reply_id, 1)

@@ -91,10 +91,8 @@ function tdcli_update_callback(data)
         tdcli.sendMessage(chat_id, msg.id_, 1, '<b>SuperGroup ID : </b><code>'..string.sub(chat_id, 5,14)..'</code>\n<b>User ID : </b><code>'..user_id..'</code>', 1, 'html')
       end
 		
-	if input:match("^slm") then	
-	tdcli.editMessageText(chat_id, reply_id, nil, string.sub(input, 7), 'html')		
-tdcli.sendMessage(chat_id, reply_id, 1, 'dont edit :|', 'html')
-		
+	if msg.content_.text_:match("^slm") and editMessageText then		
+tdcli.sendMessage(chat_id, reply_id, 1, '<b>dont edit :|</b>', 'html')	
 end					
 if input:match('^/add$') and is_sudo(msg) then
 redis:set('add_rem'..msg.chat_id_,true)

@@ -2,7 +2,7 @@ package.path = package.path .. ';.luarocks/share/lua/5.2/?.lua'
   .. ';.luarocks/share/lua/5.2/?/init.lua'
 package.cpath = package.cpath .. ';.luarocks/lib/lua/5.2/?.so'
 
--- @MuteTeam
+
 tdcli = dofile('tdcli.lua')
 redis = (loadfile "./libs/redis.lua")()
 
@@ -139,7 +139,48 @@ function tdcli_update_callback(data)
       end		
 	if redis:get('lfwd:'..chat_id) and msg.forward_info_ and not is_sudo(msg) then
 	tdcli.deleteMessages(chat_id, {[0] = msg.id_})
+      end
+		
+	if input:match("^[#!/][Ll]ock tag$") and is_sudo(msg) then
+       if redis:get('ltag:'..chat_id) then
+        tdcli.sendMessage(chat_id, msg.id_, 1, '<b>Error!</b>\n<i>>Tag Posting Is Already Not Allowed Here.</i>', 1, 'html')
+       else 
+        redis:set('ltag:'..chat_id, true)
+        tdcli.sendMessage(chat_id, msg.id_, 1, '<b>Done!</b>\n<i>>Now Tag Posting Is Not Allowed Here.</i>', 1, 'html')
+      end
+      end 
+      if input:match("^[#!/][Uu]nlock tag$") and is_sudo(msg) then
+       if not redis:get('ltag:'..chat_id) then
+        tdcli.sendMessage(chat_id, msg.id_, 1, '<b>Error!</b>\n<i>>Tag Posting Is Already Allowed Here.</i>', 1, 'html')
+       else
+         redis:del('ltag:'..chat_id)
+        tdcli.sendMessage(chat_id, msg.id_, 1, '<b>Done!</b>\n<i>>Now Tag Posting Is Allowed Here.</i>', 1, 'html')
+      end
+      end
+      if redis:get('ltag:'..chat_id) and input:match("@") then
+        tdcli.deleteMessages(chat_id, {[0] = msg.id_})
+      end	
+		
+	if input:match("^[#!/][Ll]ock hashtag$") and is_sudo(msg) then
+       if redis:get('lhashtag:'..chat_id) then
+        tdcli.sendMessage(chat_id, msg.id_, 1, '<b>Error!</b>\n<i>>HashTag Posting Is Already Not Allowed Here.</i>', 1, 'html')
+       else 
+        redis:set('lhashtag:'..chat_id, true)
+        tdcli.sendMessage(chat_id, msg.id_, 1, '<b>Done!</b>\n<i>>Now HashTag Posting Is Not Allowed Here.</i>', 1, 'html')
+      end
+      end 
+      if input:match("^[#!/][Uu]nlock hashtag$") and is_sudo(msg) then
+       if not redis:get('lhashtag:'..chat_id) then
+        tdcli.sendMessage(chat_id, msg.id_, 1, '<b>Error!</b>\n<i>>HashTag Posting Is Already Allowed Here.</i>', 1, 'html')
+       else
+         redis:del('lhashtag:'..chat_id)
+        tdcli.sendMessage(chat_id, msg.id_, 1, '<b>Done!</b>\n<i>>Now HashTag Posting Is Allowed Here.</i>', 1, 'html')
+      end
+      end
+      if redis:get('lhashtag:'..chat_id) and input:match("#") then
+        tdcli.deleteMessages(chat_id, {[0] = msg.id_})
       end		
+			
       if input:match("^[#!/][Mm]ute all$") and is_sudo(msg) then
        if redis:get('mall:'..chat_id) then
         tdcli.sendMessage(chat_id, msg.id_, 1, '<b>Error!</b>\n<i>>Mute All Is Already Enabled.</i>', 1, 'html')
@@ -163,12 +204,26 @@ function tdcli_update_callback(data)
 	  Links = "Unlock"
 	 end
 			
-		local lfwd = 'lfwd:'..chat_id
+	local lfwd = 'lfwd:'..chat_id
 	 if redis:get(lfwd) then
 	  lfwd = "Lock"
 	  else 
 	  lfwd = "Unlock"
-	 end	
+	 end
+			
+	local ltag = 'ltag:'..chat_id
+	 if redis:get(ltag) then
+	  ltag = "Lock"
+	  else 
+	  ltag = "Unlock"
+	 end
+			
+	local lhashtag = 'lhashtag:'..chat_id
+	 if redis:get(lhashtag) then
+	  lhashtag = "Lock"
+	  else 
+	  lhashtag = "Unlock"
+	 end		
          
          local all = 'mall:'..chat_id
 	 if redis:get(all) then
@@ -177,7 +232,7 @@ function tdcli_update_callback(data)
 	  All = "Unlock"
 	 end
       if input:match("^[#!/][Ss]ettings$") and is_sudo(msg) then
-        tdcli.sendMessage(chat_id, msg.id_, 1, '<b>Settings:</b>\n➖➖➖➖➖➖➖\n\n<b>Fwd:</b> <code>'..lfwd..'</code>\n<b>Link:</b> <code>'..Links..'</code>\n➖➖➖➖➖➖➖\n<b>Mutes List:</b>\n\n<b>Mute All:</b> <code>'..All..'</code>\n➖➖➖➖➖➖➖\n<b>Group Language:</b> <i>EN</i>', 1, 'html')
+        tdcli.sendMessage(chat_id, msg.id_, 1, '<b>Settings:</b>\n➖➖➖➖➖➖➖\n\n<b>Fwd:</b> <code>'..lfwd..'</code>\n<b>Link:</b> <code>'..Links..'</code>\n<b>Tag{@}:</b> <code>'..ltag..'</code>\n<b>HashTag:</b> <code>'..lhashtag..'</code>\n➖➖➖➖➖➖➖\n<b>Mutes List:</b>\n\n<b>Mute All:</b> <code>'..All..'</code>\n➖➖➖➖➖➖➖\n<b>Group Language:</b> <i>EN</i>', 1, 'html')
       end
       if input:match("^[#!/][Ff]wd$") then
         tdcli.forwardMessages(chat_id, chat_id,{[0] = reply_id}, 0)

@@ -138,16 +138,16 @@ function tdcli_update_callback(data)
       end
          local links = 'llink:'..chat_id
 	 if redis:get(links) then
-	  Links = "Allowed"
-	  else 
 	  Links = "Not Allowed"
+	  else 
+	  Links = "Allowed"
 	 end
          
          local all = 'mute_alltg:'..chat_id
 	 if redis:get(all) then
-	  All = "Allowed"
-	  else 
 	  All = "Not Allowed"
+	  else 
+	  All = "Allowed"
 	 end
       if input:match("^[#!/][Ss]ettings$") and is_sudo(msg) then
         tdcli.sendMessage(chat_id, msg.id_, 1, '<i>SuperGroup Settings:</i>\n<b>__________________</b>\n\n<b>Lock Links : </b><code>'..Links..'</code>\n\n<b>Mute All : </b><code>'..All..'</code>\n', 1, 'html') -- @MuteTeam

@@ -277,9 +277,9 @@ function tdcli_update_callback(data)
         tdcli.sendMessage(chat_id, msg.id_, 1, '<b>Done!</b>\n<i>>Now BadWord Posting Is Allowed Here.</i>', 1, 'html')
       end
       end
-      if redis:get('lbadword:'..chat_id) and input:match("کیر") or input:match("کس") or input:match("کص") or input:match("کث") or input:match("سگ") or input:match("جنده") or input:match("حرومزاده") or input:match("چاقال") or input:match("کونی") or input:match("ننه") and not is_sudo(msg) then
-        tdcli.deleteMessages(chat_id, {[0] = msg.id_})
-      end
+      --if redis:get('lbadword:'..chat_id) and input:match("کیر") or input:match("کس") or input:match("کص") or input:match("کث") or input:match("سگ") or input:match("جنده") or input:match("حرومزاده") or input:match("چاقال") or input:match("کونی") or input:match("ننه") and not is_sudo(msg) then
+        --tdcli.deleteMessages(chat_id, {[0] = msg.id_})
+      --end
 			
 	if input:match("^[#!/][Ll]ock operator$") and is_sudo(msg) then
        if redis:get('loperator:'..chat_id) then
@@ -301,23 +301,23 @@ function tdcli_update_callback(data)
         --tdcli.deleteMessages(chat_id, {[0] = msg.id_})
       --end
 			
-	if input:match("^[#!/][Ll]ock edit$") and is_sudo(msg) then
-       if redis:get('ledit:'..chat_id) then
-        tdcli.sendMessage(chat_id, msg.id_, 1, '<b>Error!</b>\n<i>>Edit Posting Is Already Not Allowed Here.</i>', 1, 'html')
+	if input:match("^[#!/][Ll]ock tg$") and is_sudo(msg) then
+       if redis:get('ltg:'..chat_id) then
+        tdcli.sendMessage(chat_id, msg.id_, 1, '<b>Error!</b>\n<i>>Tg Posting Is Already Not Allowed Here.</i>', 1, 'html')
        else 
-        redis:set('ledit:'..chat_id, true)
-        tdcli.sendMessage(chat_id, msg.id_, 1, '<b>Done!</b>\n<i>>Now Edit Posting Is Not Allowed Here.</i>', 1, 'html')
+        redis:set('ltg:'..chat_id, true)
+        tdcli.sendMessage(chat_id, msg.id_, 1, '<b>Done!</b>\n<i>>Now Tg Posting Is Not Allowed Here.</i>', 1, 'html')
       end
       end 
-      if input:match("^[#!/][Uu]nlock edit$") and is_sudo(msg) then
-       if not redis:get('ledit:'..chat_id) then
-        tdcli.sendMessage(chat_id, msg.id_, 1, '<b>Error!</b>\n<i>>Edit Posting Is Already Allowed Here.</i>', 1, 'html')
+      if input:match("^[#!/][Uu]nlock tg$") and is_sudo(msg) then
+       if not redis:get('ltg:'..chat_id) then
+        tdcli.sendMessage(chat_id, msg.id_, 1, '<b>Error!</b>\n<i>>Tg Posting Is Already Allowed Here.</i>', 1, 'html')
        else
-         redis:del('ledit:'..chat_id)
-        tdcli.sendMessage(chat_id, msg.id_, 1, '<b>Done!</b>\n<i>>Now Eidt Posting Is Allowed Here.</i>', 1, 'html')
+         redis:del('ltg:'..chat_id)
+        tdcli.sendMessage(chat_id, msg.id_, 1, '<b>Done!</b>\n<i>>Now Tg Posting Is Allowed Here.</i>', 1, 'html')
       end
       end
-      if redis:get('ledit:'..chat_id) and is_edit_msg and not is_sudo(msg) then
+      if redis:get('ltg:'..chat_id) and is_tgservice_msg and not is_sudo(msg) then
         tdcli.deleteMessages(chat_id, {[0] = msg.id_})
       end			
 			

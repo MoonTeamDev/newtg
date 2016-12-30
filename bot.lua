@@ -121,18 +121,18 @@ function tdcli_update_callback(data)
         tdcli.deleteMessages(chat_id, {[0] = msg.id_})
       end
       if input:match("^[#!/][Mm]ute all$") and is_sudo(msg) then
-       if redis:get('mute_alltg:'..chat_id) then
+       if redis:get('mall:'..chat_id) then
         tdcli.sendMessage(chat_id, msg.id_, 1, '<b>Error!</b>\n<i>>Mute All Is Already Enabled.</i>', 1, 'html')
        else 
-        redis:set('mute_alltg:'..chat_id, true)
+        redis:set('mall:'..chat_id, true)
         tdcli.sendMessage(chat_id, msg.id_, 1, '<b>Done!</b\n<i>>Mute All Has Been Enabled.</i>', 1, 'html')
       end
       end
       if input:match("^[#!/][Uu]nmute all$") and is_sudo(msg) then
-       if not redis:get('mute_alltg:'..chat_id) then
+       if not redis:get('mall:'..chat_id) then
         tdcli.sendMessage(chat_id, msg.id_, 1, '<b>Error!</b>\n<i>>Mute All Is Already Disable.</i>', 1, 'html')
        else 
-         redis:del('mute_alltg:'..chat_id)
+         redis:del('mall:'..chat_id)
         tdcli.sendMessage(chat_id, msg.id_, 1, '<b>Done!</b>\n<i>>Mute All Has Been Disabled.</i>', 1, 'html')
       end
       end
@@ -143,14 +143,14 @@ function tdcli_update_callback(data)
 	  Links = "Unlock"
 	 end
          
-         local all = 'mute_alltg:'..chat_id
+         local all = 'mall:'..chat_id
 	 if redis:get(all) then
 	  All = "Lock"
 	  else 
 	  All = "Unlock"
 	 end
       if input:match("^[#!/][Ss]ettings$") and is_sudo(msg) then
-        tdcli.sendMessage(chat_id, msg.id_, 1, '<i>SuperGroup Settings:</i>\n<b>__________________</b>\n\n<b>Lock Links : </b><code>'..Links..'</code>\n\n<b>Mute All : </b><code>'..All..'</code>\n', 1, 'html') -- @MuteTeam
+        tdcli.sendMessage(chat_id, msg.id_, 1, '<b>Settings:</b>\n➖➖➖➖➖➖➖\n\n<b>Link:</b> <code>'..Links..'</code>\n➖➖➖➖➖➖➖\n<b>Mutes List:</b>\n\n<b>Mute All:</b> <code>'..All..'</code>\n', 1, 'html')
       end
       if input:match("^[#!/][Ff]wd$") then
         tdcli.forwardMessages(chat_id, chat_id,{[0] = reply_id}, 0)
@@ -192,12 +192,12 @@ function tdcli_update_callback(data)
       end
     end
 
-   if redis:get('mute_alltg:'..chat_id) and msg then
+   if redis:get('mall:'..chat_id) and msg then
      tdcli.deleteMessages(chat_id, {[0] = msg.id_})
    end
 
   elseif (data.ID == "UpdateOption" and data.name_ == "my_id") then
-    -- @MuteTeam
+    
     tdcli_function ({
       ID="GetChats",
       offset_order_="9223372036854775807",

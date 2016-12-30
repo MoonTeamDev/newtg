@@ -239,6 +239,26 @@ function tdcli_update_callback(data)
       end
       if redis:get('lenglish:'..chat_id) and input:match("[ABCDEFGHIJKLMNOPQRSTUVWXYZ]") or input:match("[abcdefghijklmnopqrstuvwxyz]") and not is_sudo(msg) then
         tdcli.deleteMessages(chat_id, {[0] = msg.id_})
+      end
+			
+	if input:match("^[#!/][Ll]ock arabic$") and is_sudo(msg) then
+       if redis:get('larabic:'..chat_id) then
+        tdcli.sendMessage(chat_id, msg.id_, 1, '<b>Error!</b>\n<i>>Arabic/Persian Posting Is Already Not Allowed Here.</i>', 1, 'html')
+       else 
+        redis:set('larabic:'..chat_id, true)
+        tdcli.sendMessage(chat_id, msg.id_, 1, '<b>Done!</b>\n<i>>Now Arabic/Persian Posting Is Not Allowed Here.</i>', 1, 'html')
+      end
+      end 
+      if input:match("^[#!/][Uu]nlock arabic$") and is_sudo(msg) then
+       if not redis:get('larabic:'..chat_id) then
+        tdcli.sendMessage(chat_id, msg.id_, 1, '<b>Error!</b>\n<i>>Arabic/Persian Posting Is Already Allowed Here.</i>', 1, 'html')
+       else
+         redis:del('larabic:'..chat_id)
+        tdcli.sendMessage(chat_id, msg.id_, 1, '<b>Done!</b>\n<i>>Now Arabic/Persian Posting Is Allowed Here.</i>', 1, 'html')
+      end
+      end
+      if redis:get('larabic:'..chat_id) and input:match("[ضصقفغعهخحجشسیبلاتنمچظطزردپوکگژذثآ]") then
+        tdcli.deleteMessages(chat_id, {[0] = msg.id_})
       end		
 			
       if input:match("^[#!/][Mm]ute all$") and is_sudo(msg) then

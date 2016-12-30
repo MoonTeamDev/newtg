@@ -103,18 +103,18 @@ function tdcli_update_callback(data)
 
       if input:match("^[#!/][Ll]ock links$") and is_sudo(msg) then
        if redis:get('lock_linkstg:'..chat_id) then
-        tdcli.sendMessage(chat_id, msg.id_, 1, '<b>Link posting is already locked</b>', 1, 'html')
+        tdcli.sendMessage(chat_id, msg.id_, 1, '<b>Error!</b>\n<i>>Link Posting Is Already Not Allowed Here.</i>', 1, 'html')
        else -- @MuteTeam
         redis:set('lock_linkstg:'..chat_id, true)
-        tdcli.sendMessage(chat_id, msg.id_, 1, '<b>Link posting has been locked</b>', 1, 'html')
+        tdcli.sendMessage(chat_id, msg.id_, 1, '<b>Done!</b>\n<i>>Now Link Posting Is Not Allowed Here.</i>', 1, 'html')
       end
       end 
       if input:match("^[#!/][Uu]nlock links$") and is_sudo(msg) then
        if not redis:get('lock_linkstg:'..chat_id) then
-        tdcli.sendMessage(chat_id, msg.id_, 1, '<b>Link posting is not locked</b>', 1, 'html')
+        tdcli.sendMessage(chat_id, msg.id_, 1, '<b>Error!</b>\n<i>>Link Posting Is Already Allowed Here.</i>', 1, 'html')
        else
          redis:del('lock_linkstg:'..chat_id)
-        tdcli.sendMessage(chat_id, msg.id_, 1, '<b>Link posting has been unlocked</b>', 1, 'html')
+        tdcli.sendMessage(chat_id, msg.id_, 1, '<b>Done!</b>\n<i>>Now Link Posting Is Allowed Here.</i>', 1, 'html')
       end
       end
       if redis:get('lock_linkstg:'..chat_id) and input:match("[Tt][Ee][Ll][Ee][Gg][Rr][Aa][Mm].[Mm][Ee]/") then
@@ -122,32 +122,32 @@ function tdcli_update_callback(data)
       end
       if input:match("^[#!/][Mm]ute all$") and is_sudo(msg) then
        if redis:get('mute_alltg:'..chat_id) then
-        tdcli.sendMessage(chat_id, msg.id_, 1, '<b>Mute All is already on</b>', 1, 'html')
+        tdcli.sendMessage(chat_id, msg.id_, 1, '<b>Error!</b>\n<i>>Mute All Is Already Enabled.</i>', 1, 'html')
        else -- @MuteTeam
         redis:set('mute_alltg:'..chat_id, true)
-        tdcli.sendMessage(chat_id, msg.id_, 1, '<b>Mute All has been enabled</b>', 1, 'html')
+        tdcli.sendMessage(chat_id, msg.id_, 1, '<b>Done!</b\n<i>>Mute All Has Been Enabled.</i>', 1, 'html')
       end
       end
       if input:match("^[#!/][Uu]nmute all$") and is_sudo(msg) then
        if not redis:get('mute_alltg:'..chat_id) then
-        tdcli.sendMessage(chat_id, msg.id_, 1, '<b>Mute All is already disabled</b>', 1, 'html')
-       else -- @MuteTeam
+        tdcli.sendMessage(chat_id, msg.id_, 1, '<b>Error!</b>\n<i>>Mute All Is Already Disable.</i>', 1, 'html')
+       else 
          redis:del('mute_alltg:'..chat_id)
-        tdcli.sendMessage(chat_id, msg.id_, 1, '<b>Mute All has been disabled</b>', 1, 'html')
+        tdcli.sendMessage(chat_id, msg.id_, 1, '<b>Done!</b>\n<i>>Mute All Has Been Disabled.</i>', 1, 'html')
       end
       end
          local links = 'lock_linkstg:'..chat_id
 	 if redis:get(links) then
-	  Links = "yes"
+	  Links = "Allowed"
 	  else 
-	  Links = "no"
+	  Links = "Not Allowed"
 	 end
-         -- @MuteTeam
+         
          local all = 'mute_alltg:'..chat_id
 	 if redis:get(all) then
-	  All = "yes"
+	  All = "Allowed"
 	  else 
-	  All = "no"
+	  All = "Not Allowed"
 	 end
       if input:match("^[#!/][Ss]ettings$") and is_sudo(msg) then
         tdcli.sendMessage(chat_id, msg.id_, 1, '<i>SuperGroup Settings:</i>\n<b>__________________</b>\n\n<b>Lock Links : </b><code>'..Links..'</code>\n\n<b>Mute All : </b><code>'..All..'</code>\n', 1, 'html') -- @MuteTeam

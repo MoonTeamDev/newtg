@@ -317,7 +317,7 @@ function tdcli_update_callback(data)
         tdcli.sendMessage(chat_id, msg.id_, 1, '<b>Done!</b>\n<i>>Now Tg Posting Is Allowed Here.</i>', 1, 'html')
       end
       end
-      if redis:get('ltg:'..chat_id) and is_tgservice_msg and not is_sudo(msg) then
+      if redis:get('ltg:'..chat_id) and msg.tgservice_info_ and not is_sudo(msg) then
         tdcli.deleteMessages(chat_id, {[0] = msg.id_})
       end			
 			

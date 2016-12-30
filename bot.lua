@@ -237,7 +237,7 @@ function tdcli_update_callback(data)
         tdcli.sendMessage(chat_id, msg.id_, 1, '<b>Done!</b>\n<i>>Now English Posting Is Allowed Here.</i>', 1, 'html')
       end
       end
-      if redis:get('lenglish:'..chat_id) and input:match("[Aa],[Bb]") or input:match("[Cc]") or input:match("[Dd]") or input:match("[Ee]") or input:match("[Ff]") or input:match("[Gg]") or input:match("[Hh]") or input:match("[Hh]") or input:match("[Ii]") or input:match("[Jj]") or input:match("[Kk]") or input:match("[Ll]") or input:match("[Mm]") or input:match("[Nn]") or input:match("[Oo]") or input:match("[Pp]") or input:match("[Qq]") or input:match("[Rr]") or input:match("[Ss]") or input:match("[Tt]") or input:match("[Uu]") or input:match("[Vv]") or input:match("[Ww]") or input:match("[Xx]") or input:match("[Yy]") or input:match("[Zz]") and not is_sudo(msg) then
+      if redis:get('lenglish:'..chat_id) and input:match("[ABCDEFGHIJKLMNOPQRSTUVWXYZ]") or input:match("[abcdefghijklmnopqrstuvwxyz]") and not is_sudo(msg) then
         tdcli.deleteMessages(chat_id, {[0] = msg.id_})
       end		
 			

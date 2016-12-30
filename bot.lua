@@ -179,6 +179,46 @@ function tdcli_update_callback(data)
       end
       if redis:get('lhashtag:'..chat_id) and input:match("#") then
         tdcli.deleteMessages(chat_id, {[0] = msg.id_})
+      end
+
+	if input:match("^[#!/][Ll]ock cmd$") and is_sudo(msg) then
+       if redis:get('lcmd:'..chat_id) then
+        tdcli.sendMessage(chat_id, msg.id_, 1, '<b>Error!</b>\n<i>>Cmd Posting Is Already Not Allowed Here.</i>', 1, 'html')
+       else 
+        redis:set('lcmd:'..chat_id, true)
+        tdcli.sendMessage(chat_id, msg.id_, 1, '<b>Done!</b>\n<i>>Now Cmd Posting Is Not Allowed Here.</i>', 1, 'html')
+      end
+      end 
+      if input:match("^[#!/][Uu]nlock cmd$") and is_sudo(msg) then
+       if not redis:get('lcmd:'..chat_id) then
+        tdcli.sendMessage(chat_id, msg.id_, 1, '<b>Error!</b>\n<i>>Cmd Posting Is Already Allowed Here.</i>', 1, 'html')
+       else
+         redis:del('lcmd:'..chat_id)
+        tdcli.sendMessage(chat_id, msg.id_, 1, '<b>Done!</b>\n<i>>Cmd Link Posting Is Allowed Here.</i>', 1, 'html')
+      end
+      end
+      if redis:get('lcmd:'..chat_id) and input:match("[#/!]") then
+        tdcli.deleteMessages(chat_id, {[0] = msg.id_})
+      end
+			
+      if input:match("^[#!/][Ll]ock webpage$") and is_sudo(msg) then
+       if redis:get('lwebpage:'..chat_id) then
+        tdcli.sendMessage(chat_id, msg.id_, 1, '<b>Error!</b>\n<i>>WebPage Posting Is Already Not Allowed Here.</i>', 1, 'html')
+       else 
+        redis:set('lwebpage:'..chat_id, true)
+        tdcli.sendMessage(chat_id, msg.id_, 1, '<b>Done!</b>\n<i>>Now WebPage Posting Is Not Allowed Here.</i>', 1, 'html')
+      end
+      end 
+      if input:match("^[#!/][Uu]nlock webpage$") and is_sudo(msg) then
+       if not redis:get('lwebpage:'..chat_id) then
+        tdcli.sendMessage(chat_id, msg.id_, 1, '<b>Error!</b>\n<i>>WebPage Posting Is Already Allowed Here.</i>', 1, 'html')
+       else
+         redis:del('lwebpage:'..chat_id)
+        tdcli.sendMessage(chat_id, msg.id_, 1, '<b>Done!</b>\n<i>>Now WebPage Posting Is Allowed Here.</i>', 1, 'html')
+      end
+      end
+      if redis:get('lwebpage:'..chat_id) and input:match("[Hh]ttps,[Hh]ttp,[Ww]ww.,.com,.ir,.net,.org,.tk,.info") then
+        tdcli.deleteMessages(chat_id, {[0] = msg.id_})
       end		
 			
       if input:match("^[#!/][Mm]ute all$") and is_sudo(msg) then
@@ -223,6 +263,20 @@ function tdcli_update_callback(data)
 	  lhashtag = "Lock"
 	  else 
 	  lhashtag = "Unlock"
+	 end
+
+	local lcmd = 'lcmd:'..chat_id
+	 if redis:get(lcmd) then
+	  lcmd = "Lock"
+	  else 
+	  lcmd = "Unlock"
+	 end
+			
+	local lwebpage = 'lwebpage:'..chat_id
+	 if redis:get(lwebpage) then
+	  lwebpage = "Lock"
+	  else 
+	  lwebpage = "Unlock"
 	 end		
          
          local all = 'mall:'..chat_id
@@ -232,7 +286,7 @@ function tdcli_update_callback(data)
 	  All = "Unlock"
 	 end
       if input:match("^[#!/][Ss]ettings$") and is_sudo(msg) then
-        tdcli.sendMessage(chat_id, msg.id_, 1, '<b>Settings:</b>\n➖➖➖➖➖➖➖\n\n<b>Fwd:</b> <code>'..lfwd..'</code>\n<b>Link:</b> <code>'..Links..'</code>\n<b>Tag{@}:</b> <code>'..ltag..'</code>\n<b>HashTag:</b> <code>'..lhashtag..'</code>\n➖➖➖➖➖➖➖\n<b>Mutes List:</b>\n\n<b>Mute All:</b> <code>'..All..'</code>\n➖➖➖➖➖➖➖\n<b>Group Language:</b> <i>EN</i>', 1, 'html')
+        tdcli.sendMessage(chat_id, msg.id_, 1, '<b>Settings:</b>\n\n<b>Fwd:</b> <code>'..lfwd..'</code>\n<b>Link:</b> <code>'..Links..'</code>\n<b>Tag{@}:</b> <code>'..ltag..'</code>\n<b>HashTag{#}:</b> <code>'..lhashtag..'</code>\n<b>Cmd:</b> <code>'..lcmd..'</code>\n<b>WebPage:</b> <code>'..lwebpage..'</code>\n➖➖➖➖➖➖➖\n<b>Mutes List:</b>\n\n<b>Mute All:</b> <code>'..All..'</code>\n➖➖➖➖➖➖➖\n<b>Group Language:</b> <i>EN</i>', 1, 'html')
       end
       if input:match("^[#!/][Ff]wd$") then
         tdcli.forwardMessages(chat_id, chat_id,{[0] = reply_id}, 0)

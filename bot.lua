@@ -120,6 +120,26 @@ function tdcli_update_callback(data)
       if redis:get('llink:'..chat_id) and input:match("[Tt][Ee][Ll][Ee][Gg][Rr][Aa][Mm].[Mm][Ee]/") then
         tdcli.deleteMessages(chat_id, {[0] = msg.id_})
       end
+		
+	if input:match("^[#!/][Ll]ock fwd$") and is_sudo(msg) then
+       if redis:get('lfwd:'..chat_id) then
+        tdcli.sendMessage(chat_id, msg.id_, 1, '<b>Error!</b>\n<i>>Fwd Posting Is Already Not Allowed Here.</i>', 1, 'html')
+       else 
+        redis:set('lfwd:'..chat_id, true)
+        tdcli.sendMessage(chat_id, msg.id_, 1, '<b>Done!</b>\n<i>>Now Fwd Posting Is Not Allowed Here.</i>', 1, 'html')
+      end
+      end 
+      if input:match("^[#!/][Uu]nlock fwd$") and is_sudo(msg) then
+       if not redis:get('lfwd:'..chat_id) then
+        tdcli.sendMessage(chat_id, msg.id_, 1, '<b>Error!</b>\n<i>>Fwd Posting Is Already Allowed Here.</i>', 1, 'html')
+       else
+         redis:del('lfwd:'..chat_id)
+        tdcli.sendMessage(chat_id, msg.id_, 1, '<b>Done!</b>\n<i>>Now Fwd Posting Is Allowed Here.</i>', 1, 'html')
+      end
+      end		
+	if redis:get('lfwd:'..chat_id) and msg.forward_info_ and not is_sudo(msg) then
+	tdcli.deleteMessages(chat_id, {[0] = msg.id_})
+      end		
       if input:match("^[#!/][Mm]ute all$") and is_sudo(msg) then
        if redis:get('mall:'..chat_id) then
         tdcli.sendMessage(chat_id, msg.id_, 1, '<b>Error!</b>\n<i>>Mute All Is Already Enabled.</i>', 1, 'html')
@@ -142,6 +162,13 @@ function tdcli_update_callback(data)
 	  else 
 	  Links = "Unlock"
 	 end
+			
+		local lfwd = 'lfwd:'..chat_id
+	 if redis:get(lfwd) then
+	  lfwd = "Lock"
+	  else 
+	  lfwd = "Unlock"
+	 end	
          
          local all = 'mall:'..chat_id
 	 if redis:get(all) then
@@ -150,7 +177,7 @@ function tdcli_update_callback(data)
 	  All = "Unlock"
 	 end
       if input:match("^[#!/][Ss]ettings$") and is_sudo(msg) then
-        tdcli.sendMessage(chat_id, msg.id_, 1, '<b>Settings:</b>\n➖➖➖➖➖➖➖\n\n<b>Link:</b> <code>'..Links..'</code>\n➖➖➖➖➖➖➖\n<b>Mutes List:</b>\n\n<b>Mute All:</b> <code>'..All..'</code>\n', 1, 'html')
+        tdcli.sendMessage(chat_id, msg.id_, 1, '<b>Settings:</b>\n➖➖➖➖➖➖➖\n\n<b>Fwd:</b> <code>'..lfwd..'</code>\n<b>Link:</b> <code>'..Links..'</code>\n➖➖➖➖➖➖➖\n<b>Mutes List:</b>\n\n<b>Mute All:</b> <code>'..All..'</code>\n➖➖➖➖➖➖➖\n<b>Group Language:</b> <i>EN</i>', 1, 'html')
       end
       if input:match("^[#!/][Ff]wd$") then
         tdcli.forwardMessages(chat_id, chat_id,{[0] = reply_id}, 0)

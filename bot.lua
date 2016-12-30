@@ -217,7 +217,7 @@ function tdcli_update_callback(data)
         tdcli.sendMessage(chat_id, msg.id_, 1, '<b>Done!</b>\n<i>>Now WebPage Posting Is Allowed Here.</i>', 1, 'html')
       end
       end
-      if redis:get('lwebpage:'..chat_id) and input:match("[Hh]ttps,[Hh]ttp,[Ww]ww.,.com,.ir,.net,.org,.tk,.info") then
+      if redis:get('lwebpage:'..chat_id) and input:match("[Hh][Tt][Tt][Pp][Ss]://") and input:match("[Hh][Tt][Tt][Pp]://") and input:match("[Ww][Ww][Ww].") and input:match(".com") and input:match(".ir") and input:match(".org") and input:match(".net") and input:match(".info") then
         tdcli.deleteMessages(chat_id, {[0] = msg.id_})
       end		
 			

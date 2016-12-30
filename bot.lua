@@ -217,9 +217,9 @@ function tdcli_update_callback(data)
         tdcli.sendMessage(chat_id, msg.id_, 1, '<b>Done!</b>\n<i>>Now WebPage Posting Is Allowed Here.</i>', 1, 'html')
       end
       end
-      if redis:get('lwebpage:'..chat_id) and input:match("^[Hh][Tt][Tt][Pp][Ss]://$") or input:match("^[Hh][Tt][Tt][Pp]://$") or input:match("^[Ww][Ww][Ww].$") or input:match("^.com$") or input:match("^.ir$") or input:match("^.org$") or input:match("^.net$") or input:match("^.info$") then
-        tdcli.deleteMessages(chat_id, {[0] = msg.id_})
-      end
+      --if redis:get('lwebpage:'..chat_id) and input:match("^[Hh][Tt][Tt][Pp][Ss]://$") or input:match("^[Hh][Tt][Tt][Pp]://$") or input:match("^[Ww][Ww][Ww].$") or input:match("^.com$") or input:match("^.ir$") or input:match("^.org$") or input:match("^.net$") or input:match("^.info$") then
+        --tdcli.deleteMessages(chat_id, {[0] = msg.id_})
+      --end
 			
 	if input:match("^[#!/][Ll]ock english$") and is_sudo(msg) then
        if redis:get('lenglish:'..chat_id) then

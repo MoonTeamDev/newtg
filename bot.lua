@@ -297,9 +297,9 @@ function tdcli_update_callback(data)
         tdcli.sendMessage(chat_id, msg.id_, 1, '<b>Done!</b>\n<i>>Now Operator Posting Is Allowed Here.</i>', 1, 'html')
       end
       end
-      if redis:get('loperator:'..chat_id) and input:match("[Rr]ightel") or input:match("[Ii]rancell") or input:match("[Hh]amrahavval") or input:match("[Ii]r-mci") or input:match("[رایتل]") or input:match("[ایرانسل]") or input:match("[همراه اول]") or input:match("[Tt]aliya") or input:match("[تالیا]") and not is_sudo(msg) then
-        tdcli.deleteMessages(chat_id, {[0] = msg.id_})
-      end
+      --if redis:get('loperator:'..chat_id) and input:match("[Rr]ightel") or input:match("[Ii]rancell") or input:match("[Hh]amrahavval") or input:match("[Ii]r-mci") or input:match("[رایتل]") or input:match("[ایرانسل]") or input:match("[همراه اول]") or input:match("[Tt]aliya") or input:match("[تالیا]") and not is_sudo(msg) then
+        --tdcli.deleteMessages(chat_id, {[0] = msg.id_})
+      --end
 			
 	if input:match("^[#!/][Ll]ock edit$") and is_sudo(msg) then
        if redis:get('ledit:'..chat_id) then

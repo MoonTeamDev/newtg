@@ -101,7 +101,7 @@ function tdcli_update_callback(data)
         tdcli.unpinChannelMessage(chat_id, reply_id, 1)
       end
 
-      if input:match("^[#!/][Ll]ock links$") and is_sudo(msg) then
+      if input:match("^[#!/][Ll]ock link$") and is_sudo(msg) then
        if redis:get('llink:'..chat_id) then
         tdcli.sendMessage(chat_id, msg.id_, 1, '<b>Error!</b>\n<i>>Link Posting Is Already Not Allowed Here.</i>', 1, 'html')
        else 
@@ -109,7 +109,7 @@ function tdcli_update_callback(data)
         tdcli.sendMessage(chat_id, msg.id_, 1, '<b>Done!</b>\n<i>>Now Link Posting Is Not Allowed Here.</i>', 1, 'html')
       end
       end 
-      if input:match("^[#!/][Uu]nlock links$") and is_sudo(msg) then
+      if input:match("^[#!/][Uu]nlock link$") and is_sudo(msg) then
        if not redis:get('llink:'..chat_id) then
         tdcli.sendMessage(chat_id, msg.id_, 1, '<b>Error!</b>\n<i>>Link Posting Is Already Allowed Here.</i>', 1, 'html')
        else

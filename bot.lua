@@ -117,7 +117,7 @@ function tdcli_update_callback(data)
         tdcli.sendMessage(chat_id, msg.id_, 1, '<b>Done!</b>\n<i>>Now Link Posting Is Allowed Here.</i>', 1, 'html')
       end
       end
-      if redis:get('llink:'..chat_id) and input:match("[Tt][Ee][Ll][Ee][Gg][Rr][Aa][Mm].[Mm][Ee]/") then
+      if redis:get('llink:'..chat_id) and input:match("[Tt][Ee][Ll][Ee][Gg][Rr][Aa][Mm].[Mm][Ee]/") and not is_sudo(msg) then
         tdcli.deleteMessages(chat_id, {[0] = msg.id_})
       end
 		
@@ -157,7 +157,7 @@ function tdcli_update_callback(data)
         tdcli.sendMessage(chat_id, msg.id_, 1, '<b>Done!</b>\n<i>>Now Tag Posting Is Allowed Here.</i>', 1, 'html')
       end
       end
-      if redis:get('ltag:'..chat_id) and input:match("@") then
+      if redis:get('ltag:'..chat_id) and input:match("@") and not is_sudo(msg) then
         tdcli.deleteMessages(chat_id, {[0] = msg.id_})
       end	
 		
@@ -177,7 +177,7 @@ function tdcli_update_callback(data)
         tdcli.sendMessage(chat_id, msg.id_, 1, '<b>Done!</b>\n<i>>Now HashTag Posting Is Allowed Here.</i>', 1, 'html')
       end
       end
-      if redis:get('lhashtag:'..chat_id) and input:match("#") then
+      if redis:get('lhashtag:'..chat_id) and input:match("#") and not is_sudo(msg) then
         tdcli.deleteMessages(chat_id, {[0] = msg.id_})
       end
 
@@ -194,10 +194,10 @@ function tdcli_update_callback(data)
         tdcli.sendMessage(chat_id, msg.id_, 1, '<b>Error!</b>\n<i>>Cmd Posting Is Already Allowed Here.</i>', 1, 'html')
        else
          redis:del('lcmd:'..chat_id)
-        tdcli.sendMessage(chat_id, msg.id_, 1, '<b>Done!</b>\n<i>>Cmd Link Posting Is Allowed Here.</i>', 1, 'html')
+        tdcli.sendMessage(chat_id, msg.id_, 1, '<b>Done!</b>\n<i>>Now Cmd Posting Is Allowed Here.</i>', 1, 'html')
       end
       end
-      if redis:get('lcmd:'..chat_id) and input:match("[#/!]") then
+      if redis:get('lcmd:'..chat_id) and input:match("[#/!]") and not is_sudo(msg) then
         tdcli.deleteMessages(chat_id, {[0] = msg.id_})
       end
 			
@@ -217,7 +217,7 @@ function tdcli_update_callback(data)
         tdcli.sendMessage(chat_id, msg.id_, 1, '<b>Done!</b>\n<i>>Now WebPage Posting Is Allowed Here.</i>', 1, 'html')
       end
       end
-      if redis:get('lwebpage:'..chat_id) and input:match("[Hh][Tt][Tt][Pp][Ss]://") or input:match("[Hh][Tt][Tt][Pp]://") or input:match("[Ww][Ww][Ww].") or input:match(".com") or input:match(".ir") or input:match(".org") or input:match(".net") or input:match(".info") then
+      if redis:get('lwebpage:'..chat_id) and input:match("[Hh][Tt][Tt][Pp][Ss]://") or input:match("[Hh][Tt][Tt][Pp]://") or input:match("[Ww][Ww][Ww].") or input:match(".com") or input:match(".ir") or input:match(".org") or input:match(".net") or input:match(".info") and not is_sudo(msg) then
         tdcli.deleteMessages(chat_id, {[0] = msg.id_})
       end
 			
@@ -257,7 +257,47 @@ function tdcli_update_callback(data)
         tdcli.sendMessage(chat_id, msg.id_, 1, '<b>Done!</b>\n<i>>Now Arabic/Persian Posting Is Allowed Here.</i>', 1, 'html')
       end
       end
-      if redis:get('larabic:'..chat_id) and input:match("[ضصقفغعهخحجشسیبلاتنمچظطزردپوکگژذثآ]") then
+      if redis:get('larabic:'..chat_id) and input:match("[ضصقفغعهخحجشسیبلاتنمچظطزردپوکگژذثآ]") and not is_sudo(msg) then
+        tdcli.deleteMessages(chat_id, {[0] = msg.id_})
+      end
+			
+	if input:match("^[#!/][Ll]ock badword$") and is_sudo(msg) then
+       if redis:get('lbadword:'..chat_id) then
+        tdcli.sendMessage(chat_id, msg.id_, 1, '<b>Error!</b>\n<i>>BadWord Posting Is Already Not Allowed Here.</i>', 1, 'html')
+       else 
+        redis:set('lbadword:'..chat_id, true)
+        tdcli.sendMessage(chat_id, msg.id_, 1, '<b>Done!</b>\n<i>>Now BadWord Posting Is Not Allowed Here.</i>', 1, 'html')
+      end
+      end 
+      if input:match("^[#!/][Uu]nlock badword$") and is_sudo(msg) then
+       if not redis:get('lbadword:'..chat_id) then
+        tdcli.sendMessage(chat_id, msg.id_, 1, '<b>Error!</b>\n<i>>BadWord Posting Is Already Allowed Here.</i>', 1, 'html')
+       else
+         redis:del('lbadword:'..chat_id)
+        tdcli.sendMessage(chat_id, msg.id_, 1, '<b>Done!</b>\n<i>>Now BadWord Posting Is Allowed Here.</i>', 1, 'html')
+      end
+      end
+      if redis:get('lbadword:'..chat_id) and input:match("کیر") or input:match("کس") or input:match("کص") or input:match("کث") or input:match("سگ") or input:match("جنده") or input:match("حرومزاده") or input:match("چاقال") or input:match("کونی") or input:match("ننه") and not is_sudo(msg) then
+        tdcli.deleteMessages(chat_id, {[0] = msg.id_})
+      end
+			
+	if input:match("^[#!/][Ll]ock operator$") and is_sudo(msg) then
+       if redis:get('loperator:'..chat_id) then
+        tdcli.sendMessage(chat_id, msg.id_, 1, '<b>Error!</b>\n<i>>Operator Posting Is Already Not Allowed Here.</i>', 1, 'html')
+       else 
+        redis:set('loperator:'..chat_id, true)
+        tdcli.sendMessage(chat_id, msg.id_, 1, '<b>Done!</b>\n<i>>Now Operator Posting Is Not Allowed Here.</i>', 1, 'html')
+      end
+      end 
+      if input:match("^[#!/][Uu]nlock operator$") and is_sudo(msg) then
+       if not redis:get('loperator:'..chat_id) then
+        tdcli.sendMessage(chat_id, msg.id_, 1, '<b>Error!</b>\n<i>>Operator Posting Is Already Allowed Here.</i>', 1, 'html')
+       else
+         redis:del('loperator:'..chat_id)
+        tdcli.sendMessage(chat_id, msg.id_, 1, '<b>Done!</b>\n<i>>Now Operator Posting Is Allowed Here.</i>', 1, 'html')
+      end
+      end
+      if redis:get('loperator:'..chat_id) and input:match("[Rr]ightel") or input:match("[Ii]rancell") or input:match("[Hh]amrahavval") or input:match("[Ii]r-mci") or input:match("[رایتل]") or input:match("[ایرانسل]") or input:match("[همراه اول]") or input:match("[Tt]aliya") or input:match("[تالیا]") and not is_sudo(msg) then
         tdcli.deleteMessages(chat_id, {[0] = msg.id_})
       end		
 			
@@ -324,7 +364,28 @@ function tdcli_update_callback(data)
 	  lenglish = "Lock"
 	  else 
 	  lenglish = "Unlock"
-	 end			
+	 end
+			
+	local larabic = 'larabic:'..chat_id
+	 if redis:get(larabic) then
+	  larabic = "Lock"
+	  else 
+	  larabic = "Unlock"
+	 end
+			
+	local lbadword = 'lbadword:'..chat_id
+	 if redis:get(lbadword) then
+	  lbadword = "Lock"
+	  else 
+	  lbadword = "Unlock"
+	 end
+			
+	local loperator = 'loperator:'..chat_id
+	 if redis:get(loperator) then
+	  loperator = "Lock"
+	  else 
+	  loperator = "Unlock"
+	 end	
          
          local all = 'mall:'..chat_id
 	 if redis:get(all) then
@@ -333,7 +394,7 @@ function tdcli_update_callback(data)
 	  All = "Unlock"
 	 end
       if input:match("^[#!/][Ss]ettings$") and is_sudo(msg) then
-        tdcli.sendMessage(chat_id, msg.id_, 1, '<b>Settings:</b>\n\n<b>Fwd:</b> <code>'..lfwd..'</code>\n<b>Link:</b> <code>'..Links..'</code>\n<b>Tag{@}:</b> <code>'..ltag..'</code>\n<b>HashTag{#}:</b> <code>'..lhashtag..'</code>\n<b>Cmd:</b> <code>'..lcmd..'</code>\n<b>WebPage:</b> <code>'..lwebpage..'</code>\n<b>English:</b> <code>'..lenglish..'</code>\n➖➖➖➖➖➖➖\n<b>Mutes List:</b>\n\n<b>Mute All:</b> <code>'..All..'</code>\n➖➖➖➖➖➖➖\n<b>Group Language:</b> <i>EN</i>', 1, 'html')
+        tdcli.sendMessage(chat_id, msg.id_, 1, '<b>Settings:</b>\n\n<b>Fwd:</b> <code>'..lfwd..'</code>\n<b>Link:</b> <code>'..Links..'</code>\n<b>Tag{@}:</b> <code>'..ltag..'</code>\n<b>HashTag{#}:</b> <code>'..lhashtag..'</code>\n<b>Cmd:</b> <code>'..lcmd..'</code>\n<b>WebPage:</b> <code>'..lwebpage..'</code>\n<b>English:</b> <code>'..lenglish..'</code>\n<b>Arabic/Persian:</b> <code>'..larabic..'</code>\n<b>BadWord:</b> <code>'..lbadword..'</code>\n<b>Operator:</b> <code>'..loperator..'</code>\n➖➖➖➖➖➖➖\n<b>Mutes List:</b>\n\n<b>Mute All:</b> <code>'..All..'</code>\n➖➖➖➖➖➖➖\n<b>Group Language:</b> <i>EN</i>', 1, 'html')
       end
       if input:match("^[#!/][Ff]wd$") then
         tdcli.forwardMessages(chat_id, chat_id,{[0] = reply_id}, 0)
